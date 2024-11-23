@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+</head>
+<body>
+  <form id="appointmentForm">
+    <label for="cin">CIN:</label><br>
+    <input type="text" id="cin" name="cin" required><br>
+    <label for="date">Date:</label><br>
+    <input type="date" id="date" name="date" value="<?= date ? date : '' ?>" required><br>
+    <label for="time">Time:</label><br>
+    <input type="time" id="time" name="time" step="1" value="<?= time ? time : '' ?>" required><br>
+    <label for="patient">Patient Name:</label><br>
+    <input type="text" id="patient" name="patient" required><br>
+    <label for="reason">Reason for Visit:</label><br>
+    <input type="text" id="reason" name="reason"><br>
+    <button type="submit">Submit</button>
+    <div id="message"></div> <!-- Message element -->
+  </form>
+  <script>
+    document.getElementById("appointmentForm").onsubmit = function() {
+      google.script.run.withSuccessHandler(function(response) {
+        document.getElementById('message').innerHTML = response; // Display the message
+        if (response === "Appointment successfully added.") {
+          google.script.host.close();
+        }
+      }).addAppointment(
+        document.getElementById("cin").value,
+        document.getElementById("date").value,
+        document.getElementById("time").value,
+        document.getElementById("patient").value,
+        document.getElementById("reason").value
+      );
+      return false;
+    };
+  </script>
+</body>
+</html>
